@@ -60,3 +60,53 @@ form.addEventListener("submit", async (event) => {
 	document.body.appendChild(frame.frame);	
 	frame.go(url);
 });
+// Detect Scramjet button: probes common hosts/ports and saves SCRAMJET_BASE_RUNTIME
+const detectBtn = document.getElementById('detect-btn');
+const setProxyBtn = document.getElementById('set-proxy-btn');
+
+if (detectBtn) {
+  detectBtn.addEventListener('click', async () => {
+    const hosts = [window.location.hostname, 'localhost', '127.0.0.1'];
+    const ports = [8080, 1337, 80];
+    const target = 'https://example.com';
+    let foundBase = null;
+
+    outer: for (const host of hosts) {
+      for (const port of ports) {
+        const base = port === 80 ? `http://${host}` : `http://${host}:${port}`;
+        const candidates = [`${base}/?url=${encodeURIComponent(target)}`, `${base}/${encodeURIComponent(target)}`];
+        for (const c of candidates) {
+          try {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), 1500);
+            await fetch(c, { method: 'GET', signal: controller.signal });
+            clearTimeout(id);
+            foundBase = base;
+            break outer;
+          } catch (e) {
+            // try next candidate
+          }
+        }
+      }
+    }
+
+    if (foundBase) {
+      window.localStorage.setItem('SCRAMJET_BASE_RUNTIME', foundBase);
+      alert(`Scramjet detected: ${foundBase}`);
+    } else {
+      alert('Scramjet not found on common hosts/ports.');
+    }
+  });
+}
+
+if (setProxyBtn) {
+  setProxyBtn.addEventListener('click', () => {
+    const current = window.localStorage.getItem('SCRAMJET_BASE_RUNTIME') || 'http://129.213.26.17:1337';
+    const value = window.prompt('Enter Scramjet base (e.g. http://129.213.26.17:1337)', current);
+    if (value) {
+      window.localStorage.setItem('SCRAMJET_BASE_RUNTIME', value);
+      alert(`Proxy saved: ${value}`);
+      window.location.reload();
+    }
+  });
+}

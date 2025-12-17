@@ -20,28 +20,35 @@
 	</head>
 
 	<body>
-		<div
-			title="Scramjet Logo"
-			class="flex-center logo-wrapper header-center"
-		>
-			<img class="logo" src="sj.png" alt="Scramjet" />
-			<h1>Scramjet | MW</h1>
-		</div>
-		<div class="flex-center desc left-margin">
-			<p>
-				Scramjet is an experimental interception based web proxy designed to evade internet censorship, 
-				bypass arbitrary web browser restrictions and innovate web proxy technologies.
-			</p>
-		</div>
+		<header class="px-6 py-6">
+			<nav class="max-w-6xl mx-auto flex items-center justify-between nav-row">
+				<div class="nav-left">
+					<div class="brand-badge">:</div>
+					<span class="brand">Scramjet <span class="brand-sub">• MW</span></span>
+				</div>
+				<div class="nav-right">
+					<span class="hint">Free &amp; Anonymous</span>
+					<button id="detect-btn" class="btn">Detect Scramjet</button>
+					<button id="set-proxy-btn" class="btn">Set Proxy</button>
+				</div>
+			</nav>
+		</header>
 
-		<form id="sj-form" class="flex-center">
-			<input
-				id="sj-search-engine"
-				value="https://www.google.com/search?q=%s"
-				type="hidden"
-			/>
-			<input id="sj-address" type="text" placeholder="Search the web freely" />
-		</form>
+		<main class="hero px-6 pt-16 pb-24">
+			<div class="max-w-4xl mx-auto text-center">
+				<h1 class="hero-title"><span class="text-gradient">Browse the web</span><br /><span class="text-gradient-accent">without limits</span></h1>
+				<p class="hero-sub">Enter any URL and instantly bypass network restrictions. Access blocked websites freely and anonymously.</p>
+
+				<form id="sj-form" class="searchbar" autocomplete="off">
+					<input id="sj-search-engine" value="https://www.google.com/search?q=%s" type="hidden" />
+					<input id="sj-address" type="text" placeholder="Search the web freely" />
+					<button type="submit" class="btn primary">Open</button>
+				</form>
+
+				<p class="hint small">Just enter a URL like <span class="muted">google.com</span> or <span class="muted">youtube.com</span></p>
+			</div>
+		</main>
+
 		<div class="desc left-margin">
 			<p id="sj-error"></p>
 			<pre id="sj-error-code"></pre>
