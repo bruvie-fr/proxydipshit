@@ -63,6 +63,9 @@ form.addEventListener("submit", async (event) => {
 // Detect Scramjet button: probes common hosts/ports and saves SCRAMJET_BASE_RUNTIME
 const detectBtn = document.getElementById('detect-btn');
 const setProxyBtn = document.getElementById('set-proxy-btn');
+// expose for panel buttons to invoke
+window.detectBtn = detectBtn;
+window.setProxyBtn = setProxyBtn;
 
 if (detectBtn) {
   detectBtn.addEventListener('click', async () => {
@@ -110,3 +113,60 @@ if (setProxyBtn) {
     }
   });
 }
+
+// --- Tabs: accessible tab switching and panel animation ---
+(function () {
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  function activateTabFor(id) {
+    tabs.forEach((t) => {
+      const controls = t.getAttribute('aria-controls');
+      const isActive = controls === id;
+      t.classList.toggle('active', isActive);
+      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    panels.forEach((p) => {
+      const isActive = p.id === id;
+      if (isActive) {
+        p.removeAttribute('hidden');
+        p.classList.add('active', 'animate-in');
+        p.setAttribute('aria-hidden', 'false');
+      } else {
+        p.classList.remove('active', 'animate-in');
+        p.setAttribute('hidden', '');
+        p.setAttribute('aria-hidden', 'true');
+      }
+    });
+    localStorage.setItem('selectedTab', id);
+    // Update proxy display whenever proxy panel is selected
+    if (id === 'tab-proxy') updateProxyDisplay();
+  }
+
+  tabs.forEach((t) => {
+    t.addEventListener('click', () => activateTabFor(t.getAttribute('aria-controls')));
+    t.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        const idx = Array.from(tabs).indexOf(t);
+        const next = e.key === 'ArrowRight' ? (idx + 1) % tabs.length : (idx - 1 + tabs.length) % tabs.length;
+        tabs[next].focus();
+      }
+    });
+  });
+
+  // wire proxy-panel buttons to the existing handlers (if present)
+  const detectPanelBtn = document.getElementById('detect-btn-panel');
+  const setPanelBtn = document.getElementById('set-proxy-btn-panel');
+  if (detectPanelBtn && window.detectBtn) detectPanelBtn.addEventListener('click', () => window.detectBtn.click());
+  if (setPanelBtn && window.setProxyBtn) setPanelBtn.addEventListener('click', () => window.setProxyBtn.click());
+
+  function updateProxyDisplay() {
+    const el = document.getElementById('current-proxy');
+    if (!el) return;
+    el.textContent = window.localStorage.getItem('SCRAMJET_BASE_RUNTIME') || 'Not set';
+  }
+
+  // load selected tab or default
+  const start = localStorage.getItem('selectedTab') || 'tab-browse';
+  activateTabFor(start);
+})();
