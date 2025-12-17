@@ -83,6 +83,14 @@ footer a,footer span{margin:0 15px;text-decoration:none;color:var(--muted);font-
 .footer-copyright{color:var(--muted);font-size:13px}
 
 /* small helpers */
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+select#theme-select{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 8px;border-radius:8px;color:var(--foreground);font-size:13px}
+
+/* theme variants */
+:root{--primary:#00c3d6}
+html[data-theme="light"]{--background:linear-gradient(180deg,#f7f9fc 0%,#eef2f7 100%);--foreground:#0b1220;--muted:rgba(11,18,32,0.6);--primary:#0066ff;--glass-bg:rgba(255,255,255,0.6);--glass-border:rgba(10,10,10,0.06)}
+html[data-theme="teal"]{--background:linear-gradient(180deg,#052426 0%,#061b1c 100%);--foreground:#eafaf9;--muted:rgba(234,250,249,0.6);--primary:#00d1b2}
+
 .glass{background:var(--glass-bg);backdrop-filter:blur(14px);border:1px solid var(--glass-border);border-radius:10px}
 .glow{box-shadow:var(--shadow-glow)}
 
