@@ -63,6 +63,17 @@ footer a,footer span{margin:0 15px;text-decoration:none;color:var(--muted);font-
 .credit label{margin-left:auto;margin-right:15px}
 .credit a,label{color:var(--foreground);text-decoration:underline;text-align:right}
 
+/* container to align page sections */
+.container{max-width:720px;margin:0 auto;padding:0 16px}
+
+.desc{margin-top:10px;color:var(--muted);text-align:left}
+#sj-error, #sj-error-code{margin:6px 0}
+
+/* footer alignment */
+.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0}
+.footer-links{display:flex;gap:12px;flex-wrap:wrap}
+.footer-copyright{color:var(--muted);font-size:13px}
+
 /* small helpers */
 .glass{background:var(--glass-bg);backdrop-filter:blur(14px);border:1px solid var(--glass-border);border-radius:10px}
 .glow{box-shadow:var(--shadow-glow)}
