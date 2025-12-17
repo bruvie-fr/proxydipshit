@@ -114,3 +114,43 @@ if (setProxyBtn) {
   });
 }
 
+// Theme handling (persisted)
+(function(){
+  const select = document.getElementById('theme-select');
+  const storageKey = 'theme';
+
+  function applyThemeChoice(choice){
+    if(choice === 'system'){
+      const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', choice);
+    }
+  }
+
+  function init(){
+    const stored = localStorage.getItem(storageKey) || 'system';
+    if(select) select.value = stored;
+    applyThemeChoice(stored);
+
+    if(select){
+      select.addEventListener('change', (e)=> {
+        const val = e.target.value;
+        localStorage.setItem(storageKey, val);
+        applyThemeChoice(val);
+      });
+    }
+
+    // listen for system changes
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if((localStorage.getItem(storageKey) || 'system') === 'system'){
+          applyThemeChoice('system');
+        }
+      });
+    }
+  }
+
+  init();
+})();
+
